@@ -56,6 +56,15 @@ public class EmlFileGenerator
 
         string body = (string)json["Body"];
 
+        if (body == null)
+        {
+            // Include body get content from external file
+            string includeBody = (string)json["BodyS3Path"];
+
+            // Read content from file
+            body = GetFileContentFromS3(Bucketname, includeBody).Result;
+        }
+
         message.Body = new TextPart(MimeKit.Text.TextFormat.Html)
         {
             Text = body
