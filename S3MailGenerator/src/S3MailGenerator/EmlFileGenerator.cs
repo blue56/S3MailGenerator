@@ -61,6 +61,13 @@ public class EmlFileGenerator
             // Include body get content from external file
             string includeBody = (string)json["BodyS3Path"];
 
+            if (includeBody.StartsWith("./")) {
+                int i = JsonFile.LastIndexOf("/");
+                string prefix = JsonFile.Substring(0, i+1);
+
+                includeBody = includeBody.Replace("./", prefix);
+            }
+
             // Read content from file
             body = GetFileContentFromS3(Bucketname, includeBody).Result;
         }
